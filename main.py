@@ -100,90 +100,112 @@ A loop to display the menu and handle user input, invoking the appropriate funct
         directory (str): directory where 'Pink_Floyd_DB.TXT' is located
 
     Returns:
-        discog (dict): dictionary with data from 'Pink_Floyd_DB.TXT', the parsed discography
+        discog (dict): nested dictionary with data from 'Pink_Floyd_DB.TXT', each key is an album, the value is a dictionary
+        with it's details (release year) and a list of the songs in it
+
+                            # {'album_name': 'The Piper At The Gates Of Dawn', 'release_year': '1967',
+                    # 'songs_list': [{'song_name': 'Lucifer Sam', 'song_writer': 'Syd Barrett', 'song_length': '03:07', 'song_lyrics': 'Lucifer Sam, Siam cat'}]}
+
+                    # {'album_name': 'The Piper At The Gates Of Dawn', 'release_year': '1967',
+                    # 'songs_list': [{'song_name': 'Lucifer Sam', 'song_writer': 'Syd Barrett', 'song_length': '03:07', 'song_lyrics': 'Lucifer Sam, Siam cat'},
+                    # {'song_name': 'Matilda mother', 'song_writer': 'Syd Barrett', 'song_length': '03:07', 'song_lyrics': 'There was a king who ruled the land'}]}
     """
+    discography_dict = {}
+    current_album_dict = None  # a dictionary for each album we parse
 
     if not os.path.isdir(directory):
         print("Directory", directory, "not a directory in file system")
         return None
-
     file_path = os.path.join(directory, 'Pink_Floyd_DB copy.TXT')  # (directory + '/Pink_Floyd_DB.TXT')
-    # Pink_Floyd_DB copy.TXT
-
     if not os.path.isfile(file_path):
         print("File", os.path.split(file_path)[1], "isn't a file in", directory)
         return None
-
     if os.path.getsize(file_path) == 0:
         print("File", file_path, "is completely empty")
         return None
-
-    discography_dict = {}
-    current_album = None
-
     try:
-        with open(file_path, 'r') as file:
+        with (open(file_path, 'r') as file):
             print("opened the file\n")
             # print(file.read())
             # print(file.read().splitlines())
             # print(file.readlines())
 
             for line in file:
+                print("\nNEW LINE\n")
                 line = line.strip()  # remove extra whitespaces and newlines '\n' from each line str
-                # if isinstance(line, str):
-                #     print(line)
 
                 if line.startswith('#'):  # new album
                     album_details = line.split('::')  # = line[1:].split('::') ['#The Piper At The Gates Of Dawn', '1967']
-                    album_name = album_details[0][1:]  # Remove '#'
-                    current_album = album_name
+                    album_name = album_details[0][1:]  # Remove '#' from start (index 0) of each new album line
                     release_year = album_details[1]
 
+                    # init new album dict (the values are dicts in discography_dict)
+                    current_album_dict = {
+                        "album_name": album_name,
+                        "release_year": release_year,
+                        "songs_list": []  # a list of dict (each song is a dictionary)
+                    }  # {'album_name': 'The Piper At The Gates Of Dawn', 'release_year': '1967', 'songs_list': []}
                     print(album_details)
-                    print(current_album, release_year)
+                    print(album_name, ",", release_year)
+                    print(current_album_dict.items())
 
-                    discography_dict[current_album] = {}
-                    discography_dict[current_album]['release_year'] = release_year
-                    discography_dict[current_album]['songs'] = {}
-                    # print(discography_dict)
-                elif line.startswith('*'):  # new song
+                    # key-> album name, value-> dict with all the album's details
+                    discography_dict[album_name] = current_album_dict
+
+                    print(album_name, "= CURRENT ALBUM NAME = ", current_album_dict.get("album_name"), "=",
+                          discography_dict[album_name]["album_name"], "=",
+                          discography_dict[current_album_dict.get("album_name")][
+                              "album_name"])  # print(discography_dict)
+                elif line.startswith('*') and current_album_dict:  # new song (and current_album_dict not null)
                     song_details = line.split('::')  # ['*Lucifer Sam', 'Syd Barrett', '03:07', 'Lucifer Sam, Siam cat']
                     song_name = song_details[0][1:]  # Remove '*'
                     song_writer = song_details[1]
                     song_length = song_details[2]
-                    song_lyrics = song_details[3]
+                    song_lyrics = song_details[3:]  # ['Lucifer Sam, Siam cat']
+                    if len(song_lyrics) > 0:  # usually equal to 1
+                        song_lyrics = ''.join(song_lyrics)  # -> Lucifer Sam, Siam cat
+
+                    current_song_dict = {
+                        "song_name": song_name,
+                        "song_writer": song_writer,
+                        "song_length": song_length,
+                        "song_lyrics": song_lyrics
+                    }  # {'song_name': 'Matilda mother', 'song_writer': 'Syd Barrett', 'song_length': '03:07', 'song_lyrics': 'There was a king who ruled the land'}
                     print(song_details)
-                    print(current_album)
-                    discography_dict[current_album]['songs'][song_name] = song_name
-                    discography_dict[current_album]['songs'][song_writer] = song_writer
-                    discography_dict[current_album]['songs'][song_length] = song_length
-                    discography_dict[current_album]['songs'][song_lyrics] = song_lyrics
-                    # print(album_details)
-                # print(current_album)
-                print(discography_dict)
+                    print(current_song_dict)
+                    print(current_album_dict)
+                    # add the new song dict to the songs list (a list of dicts for each song) under the current album
+                    discography_dict[current_album_dict.get("album_name")]["songs_list"].append(current_song_dict)
+                elif current_album_dict and current_song_dict:
+                    lyrics_up_to_this_line_in__dict = discography_dict[current_album_dict.get("album_name")]["songs_list"][-1]['song_lyrics']
+                    discography_dict[current_album_dict.get("album_name")]["songs_list"][-1][
+                        'song_lyrics'] = lyrics_up_to_this_line_in__dict + " " + line
     except OSError as e:
         print(e)
         return None
 
     return discography_dict
 
-    # print(data)
-    # return data
 
-
-#
-# def print_hi(name):
-#     # Use a breakpoint in the code line below to debug your script.
-#     print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
     db_directory = "/Users/Study/Downloads"  # default directory where 'Pink_Floyd_DB.TXT' is located
-    # if len(sys.argv) > 1:
-    #     directory = sys.argv[1]  # e.g:  python3 main.py /Users/Study/Downloads
+    if len(sys.argv) > 1:
+        directory = sys.argv[1]  # e.g:  python3 main.py /Users/Study/Downloads
 
-    data = load_discography(db_directory)
-    if data:
-        print(data)
+    discography = load_discography(db_directory)
+    if discography:
+        print(f"\nthe keys: {discography.keys()}\n")
+        print("All albums in Pink Floyd's discography:\n")
+        for key in discography:
+            print("\t-",key)
+
+        # print("\n\n\n\n\n\tThe FINAL returned dict:"'\n', discography.keys(), '\n\n\n', discography.items(),
+        #       '\n\n\n',
+        #       discography, '\n\n\n\n\n\nFhe first album:', discography.get("The Piper At The Gates Of Dawn"),
+        #       '\n\n\n', discography.get("The Piper At The Gates Of Dawn!", "MISSING KEY!"),
+        #       '\n\n\n', discography["The Piper At The Gates Of Dawn"], '\n\n\n\n\n\nFhe last (eigth) album:',
+        #       discography.get("Animals"))
+        # # print(f"\nthe keys: {data.keys()}\n")
+        # # print(data.get('The Piper At The Gates Of Dawn'))
+        # # print("done")
