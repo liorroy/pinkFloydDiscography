@@ -408,7 +408,7 @@ if __name__ == '__main__':
 
     db_directory = "/Users/Study/Downloads"  # default directory where 'Pink_Floyd_DB.TXT' is located
     if len(sys.argv) > 1:
-        directory = sys.argv[1]  # e.g:  python3 main.py /Users/Study/Downloads
+        directory = sys.argv[1]  # e.g:  python3 pink_floyd.py /Users/Study/Downloads
 
     discography = load_discography(db_directory)
     # if isinstance(discography, dict):

@@ -163,7 +163,7 @@ A loop to display the menu and handle user input, invoking the appropriate funct
                     print("\t\t\t\t\t\t", "current song_lengthq = ", song_length, " len = ", len(song_length))
                     print("\t\t\t\t\t\t", "current song_name = ", song_lyrics, " len = ", len(song_lyrics))
 
-                    print("\t\t\t\t\t\t", song_lyrics, "len is:", len(song_lyrics))  # python3 main.py | grep "len is:"
+                    print("\t\t\t\t\t\t", song_lyrics, "len is:", len(song_lyrics))  # python3 pink_floyd.py | grep "len is:"
                     if len(song_lyrics) > 0:  # usually equal to 1
                         print("entered if!!!!!!")
                         song_lyrics = ''.join(song_lyrics)  # -> Lucifer Sam, Siam cat
@@ -171,7 +171,7 @@ A loop to display the menu and handle user input, invoking the appropriate funct
                         print("NOT entered if!!!!!!")
                         # 'Lucifer Sam, Siam cat'q
                     print("\t\t\t\t\t\t\t\t\t\t\t", song_lyrics, " \tThe leqn after the IF STATEMENT TRUE = ", len(song_lyrics))
-                    #  python3 main.py | less
+                    #  python3 pink_floyd.py | less
 
                     print(song_details)
                     print(current_album_dict)
@@ -227,7 +227,7 @@ if __name__ == '__main__':
 
     db_directory = "/Users/Study/Downloads"  # default directory where 'Pink_Floyd_DB.TXT' is located
     # if len(sys.argv) > 1:
-    #     directory = sys.argv[1]  # e.g:  python3 main.py /Users/Study/Downloads
+    #     directory = sys.argv[1]  # e.g:  python3 pink_floyd.py /Users/Study/Downloads
 
     data = load_discography(db_directory)
     if data:
