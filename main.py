@@ -16,24 +16,24 @@ def load_discography(directory):
     We open and read the file line by line, parsing each line and adding the data to our structure.
 
 
-    Finally, we return the parsed discography.
+        Finally, we return the parsed discography.
 
 
-    Parses the text file and structures the data into a dictionary with album names as keys and album details as values.
-Each album contains its title, year, and a list of songs.
-Each song is a dictionary containing its title, writer, length, and lyrics.
+        Parses the text file and structures the data into a dictionary with album names as keys and album details as values.
+    Each album contains its title, year, and a list of songs.
+    Each song is a dictionary containing its title, writer, length, and lyrics.
 
-Various functions are implemented to handle the different tasks from the menu:
-list_albums(discography)
-list_songs_in_album(discography, album_name)
-get_song_length(discography, song_name)
-get_song_lyrics(discography, song_name)
-get_album_by_song(discography, song_name)
-search_songs_by_name(discography, word)
-search_songs_by_lyrics(discography, word)
-Menu Loop:
+    Various functions are implemented to handle the different tasks from the menu:
+    list_albums(discography)
+    list_songs_in_album(discography, album_name)
+    get_song_length(discography, song_name)
+    get_song_lyrics(discography, song_name)
+    get_album_by_song(discography, song_name)
+    search_songs_by_name(discography, word)
+    search_songs_by_lyrics(discography, word)
+    Menu Loop:
 
-A loop to display the menu and handle user input, invoking the appropriate function based on the user's choice.
+    A loop to display the menu and handle user input, invoking the appropriate function based on the user's choice.
 
         We do not parse the data in the file, we just read it line by line.
 
@@ -154,9 +154,8 @@ A loop to display the menu and handle user input, invoking the appropriate funct
 
                     print(album_name, "= CURRENT ALBUM NAME = ", current_album_dict.get("album_name"), "=",
                           discography_dict[album_name]["album_name"], "=",
-                          discography_dict[current_album_dict.get("album_name")][
-                              "album_name"])  # print(discography_dict)
-                elif line.startswith('*') and current_album_dict:  # new song (and current_album_dict not null)
+                          discography_dict[current_album_dict.get("album_name")]["album_name"])  # print(discography_dict)
+                elif line.startswith('*') and current_album_dict:  # new song (current_album_dict not null)
                     song_details = line.split('::')  # ['*Lucifer Sam', 'Syd Barrett', '03:07', 'Lucifer Sam, Siam cat']
                     song_name = song_details[0][1:]  # Remove '*'
                     song_writer = song_details[1]
@@ -176,17 +175,213 @@ A loop to display the menu and handle user input, invoking the appropriate funct
                     print(current_album_dict)
                     # add the new song dict to the songs list (a list of dicts for each song) under the current album
                     discography_dict[current_album_dict.get("album_name")]["songs_list"].append(current_song_dict)
-                elif current_album_dict and current_song_dict:
+                elif current_album_dict and current_song_dict: # new song lyric line
                     lyrics_up_to_this_line_in__dict = discography_dict[current_album_dict.get("album_name")]["songs_list"][-1]['song_lyrics']
+                    # add the current line (a String) to the current song's lyrics String (with a whitespace " "
                     discography_dict[current_album_dict.get("album_name")]["songs_list"][-1][
-                        'song_lyrics'] = lyrics_up_to_this_line_in__dict + " " + line
+                        'song_lyrics'] = lyrics_up_to_this_line_in__dict + "\n" + line
+                    # + "\n" + -> I want to print out the lyrics line by line and not in one paragraph
     except OSError as e:
         print(e)
         return None
 
     return discography_dict
 
+def print_all_songs_in_album(discography, the_album):
+    if the_album in discography.keys():
+        the_albums_songs_list = discography[the_album]["songs_list"]
+        # List of dicts, every song is a dict with the keys: "song_name" "song_writer" "song_length" "song_lyrics"
 
+        # print(the_albums_songs_list)
+
+        # for song in the_albums_songs_list:
+        #     print("\t-", song["song_name"])
+        #
+        # for i in range(len(the_albums_songs_list)):
+        #     print("\t", str(i) + ".", dict(the_albums_songs_list[i]).get("song_name"))
+        #
+        # index = 0
+        # for song in the_albums_songs_list:
+        #     print("\t-", str(index) + ")", the_albums_songs_list[index]["song_name"])
+        #     index = index + 1
+        #
+        # indexi = 0
+        # for song in the_albums_songs_list:
+        #     print("\t-", str(indexi) + "-", song["song_name"])
+        #     indexi = indexi + 1
+        #
+        # for songIndex, song in enumerate(the_albums_songs_list):
+        #     print((songIndex + 1), song["song_name"], song["song_length"])
+        #
+        # for songi, song in enumerate(the_albums_songs_list, start= 1):
+        #     print(songi, song["song_name"], song["song_length"])
+
+        if isinstance(the_albums_songs_list, list) and len(the_albums_songs_list) > 0:
+            print("\nAll songs in Pink Floyd's", the_album + ":\n")
+            for song_number, song in enumerate(the_albums_songs_list, start= 1):
+                # start= 1 -> List indexes start at 0 for the first song
+                print("\n\t", str(song_number) + '.', song["song_name"])
+        else:
+            print("\n", the_album, "doesn't have any songs in the discography, please chose a different album")
+    else:
+        print("\n", the_album, "isn't an album in the discography, please try again")
+
+# def print_song_length1(discography, the_song): # Lucifer Sam
+    # all_songs_list = []  # list with all song names
+    # for key in discography:
+    #     the_albums_songs_list = discography[key]["songs_list"]
+    #     for song in the_albums_songs_list:
+    #         all_songs_list.append(song["song_name"])
+    # print(all_songs_list)
+
+    # dict with key -> song name , value -> song length
+    # all_songs_length = {}  # list with all song names
+    # for key in discography:
+    #     the_keys_song_list = discography[key]["songs_list"]
+    #     for song in the_keys_song_list:
+    #         all_songs_length[song["song_name"]] = song["song_length"]
+    #         print(song["song_name"], " ", song["song_length"])
+    # print(len(all_songs_length),"\n")
+    # print(all_songs_length.keys(),"\n")
+    # print(all_songs_length.items(),"\n")
+    # print(all_songs_length,"\n")
+    # print(all_songs_length.get("Pigs On The Wing (Part One)"),"\n\n\n\n\n\nNOW WITH LYRICS:")
+
+
+    #
+    # all_songs_length_and_lyrics = {}  # nested dict with key -> song name , value -> list with 2 elements = [length, lyrics]
+    # for key in discography:
+    #     the_keys_song_list = discography[key]["songs_list"]
+    #     for song in the_keys_song_list:
+    #         all_songs_length_and_lyrics[song["song_name"]] = [song["song_length"], song["song_lyrics"]]
+    #         print(song["song_name"], " ", song["song_length"])
+    #         print(song["song_name"], " ", song["song_lyrics"])
+    #
+    # for key in all_songs_length_and_lyrics:
+    #     print(key, "-> Length:", all_songs_length_and_lyrics[key][0], "-> LYRICS:", str(all_songs_length_and_lyrics[key][1]))
+    # print(len(all_songs_length_and_lyrics), "\n")
+    # print(all_songs_length_and_lyrics.keys(), "\n")
+    # print(all_songs_length_and_lyrics.items(), "\n")
+    # print(all_songs_length_and_lyrics, "\n")
+    # print(all_songs_length_and_lyrics.get("Pigs On The Wing (Part One)"), "\n")
+    # print(all_songs_length_and_lyrics.get("Lucifer Sam")[1])
+
+    # {
+    #     "song_name": song_name,
+    #     "song_writer": song_writer,
+    #     "song_length": song_length,
+    #     "song_lyrics": song_lyrics
+    # }
+
+    # print(len(all_songs_in_discography))
+        # the_albums_songs_list = discography[the_album]["songs_list"] # the_albums_songs_list[index]["song_name"]
+        # all_songs_in_discography.append(discography[key]["songs_list"]["song_name"])
+
+    # if the_song in all_songs_in_discography:
+    #     print("")
+    # else:
+    #     print("\n", the_song, "couldn't be found in the discography, please try again")
+#
+# def print_song_length(all_songs_length_and_lyrics, the_song):
+#     if the_song in all_songs_length_and_lyrics:
+#         print("\tThe length of the song-", the_song,  "is:", all_songs_length_and_lyrics.get(the_song)[0], "minutes")
+#     else:
+#         print("\n", the_song, "doesn't exist in the discography, please try again")
+#
+# def print_song_lyrics(all_songs_length_and_lyrics, the_song):
+#     if the_song in all_songs_length_and_lyrics:
+#         print("\nThe lyrics of the song-", the_song + ":\n\n" + all_songs_length_and_lyrics.get(the_song)[1])
+#     else:
+#         print("\n", the_song, "doesn't exist in the discography, please try again")
+
+
+def menu(discography):
+    choice = ''
+    # while choice != '1.'
+
+    while True:
+        print("\nMain Menu:")
+        print("""
+            #1\t List all Pink Floyd's albums
+            #2\t List all songs in an album
+            #3\t Lookup a song's length
+            #4\t Lookup a song's lyrics
+            #5\t Lookup a song's album
+            #6\t Lookup song's by name 
+            #7\t Lookup song's by Lyric (get all songs that contain a lyric)
+            #8\t Quit 
+            """)
+
+        # in 3. 4. look for exact song name
+        # in 6. 7. letter size doesn't matter (e.g time will return the same as input - Time, if Time is in the db),\
+        # and also find half words, e.g "ti" will find the song time
+
+        # print("\nMain Menu:")
+        # print("1. List of albums")
+        # print("2. List of songs in the album")
+        # print("3. Getting the length of the song")
+        # print("4. Getting song lyrics")
+        # print("5. In which album is the song")
+        # print("6. Searching for a song by name")
+        # print("7. Searching for a song by lyrics")
+        # print("8. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == '1':
+            # print(f"\nthe keys: {discography.keys()}\n")
+            print("The",  len(discography.keys()), "albums in Pink Floyd's discography:\n")
+            for key in discography:
+                print("\t-", key)
+            # break
+        elif choice == '2':
+            the_album = input("Enter the album name: ").strip()
+            print_all_songs_in_album(discography, the_album)
+        elif choice in ['3', '4']:
+
+            all_songs_length_and_lyrics = {}  # nested dict with key -> song name , value -> list with 2 elements = [length, lyrics]
+            for key in discography:
+                the_keys_song_list = discography[key]["songs_list"]
+                for song in the_keys_song_list:
+                    all_songs_length_and_lyrics[song["song_name"]] = [song["song_length"], song["song_lyrics"]]
+
+            the_song = input("Enter the songs name: ").strip()
+            if the_song not in all_songs_length_and_lyrics:
+                print("\n", the_song, "doesn't exist in the discography, please try again")
+            else:
+                if choice == '3':
+                    print("\n\tThe length of the song-", the_song, "is:", all_songs_length_and_lyrics.get(the_song)[0],
+                          "minutes")
+                elif choice == '4':
+                    print("\nThe lyrics for the song-",
+                          the_song + ":\n\n" + all_songs_length_and_lyrics.get(the_song)[1])
+        # elif choice == '5':
+
+            # if choice == '3':
+            #     the_song = input("Enter the songs name: ").strip()
+            #     print_song_length(all_songs_length_and_lyrics, the_song)
+            # elif choice == '4':
+            #     the_song = input("Enter the songs name to lookup it's lyrics: ").strip()
+            #     print_song_lyrics(all_songs_length_and_lyrics, the_song)
+            # break
+        # elif choice == '2':
+        #     album_name = input("Enter the album name: ")
+        #     songs = list_songs_in_album(discography, album_name)
+        #     if songs:
+        #         for song in songs:
+        #             print(song)
+        #     else:
+        #         print("Album not found.")
+        elif choice in ['8', 'q', 'Q']:
+            break
+        else:
+            print("Invalid option. Please try again.")
+
+
+
+
+
+# cd /Users/Shared/PyCharm\ projects/pinkFloydDiscography/ #
 if __name__ == '__main__':
 
     db_directory = "/Users/Study/Downloads"  # default directory where 'Pink_Floyd_DB.TXT' is located
@@ -194,18 +389,24 @@ if __name__ == '__main__':
         directory = sys.argv[1]  # e.g:  python3 main.py /Users/Study/Downloads
 
     discography = load_discography(db_directory)
-    if discography:
-        print(f"\nthe keys: {discography.keys()}\n")
-        print("All albums in Pink Floyd's discography:\n")
-        for key in discography:
-            print("\t-",key)
+    # if isinstance(discography, dict):
+    #     print("IT DICT")
+    menu(discography)
 
-        # print("\n\n\n\n\n\tThe FINAL returned dict:"'\n', discography.keys(), '\n\n\n', discography.items(),
-        #       '\n\n\n',
-        #       discography, '\n\n\n\n\n\nFhe first album:', discography.get("The Piper At The Gates Of Dawn"),
-        #       '\n\n\n', discography.get("The Piper At The Gates Of Dawn!", "MISSING KEY!"),
-        #       '\n\n\n', discography["The Piper At The Gates Of Dawn"], '\n\n\n\n\n\nFhe last (eigth) album:',
-        #       discography.get("Animals"))
-        # # print(f"\nthe keys: {data.keys()}\n")
-        # # print(data.get('The Piper At The Gates Of Dawn'))
-        # # print("done")
+    # if discography is not None:
+    #     print(f"\nthe keys: {discography.keys()}\n")
+    #     print("All albums in Pink Floyd's discography:\n")
+    #     for key in discography:
+    #         print("\t-",key)
+    # menu()
+
+
+    # print("\n\n\n\n\n\tThe FINAL returned dict:"'\n', discography.keys(), '\n\n\n', discography.items(),
+    #       '\n\n\n',
+    #       discography, '\n\n\n\n\n\nFhe first album:', discography.get("The Piper At The Gates Of Dawn"),
+    #       '\n\n\n', discography.get("The Piper At The Gates Of Dawn!", "MISSING KEY!"),
+    #       '\n\n\n', discography["The Piper At The Gates Of Dawn"], '\n\n\n\n\n\nFhe last (eigth) album:',
+    #       discography.get("Animals"))
+    # # print(f"\nthe keys: {data.keys()}\n")
+    # # print(data.get('The Piper At The Gates Of Dawn'))
+    # # print("done")
