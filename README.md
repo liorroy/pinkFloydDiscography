@@ -3,7 +3,7 @@
 1. **Clone this repository to your local machine**
    
     ```shell
-    git clone git git@github.com:liorroy/pinkFloydDiscography.git
+    git clone git@github.com:liorroy/pinkFloydDiscography.git
     ```
     
 2. **Run the script**
