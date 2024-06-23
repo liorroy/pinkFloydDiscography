@@ -1,4 +1,4 @@
-import os  # to interact with the operating system (walking through directories to parse the YAML files)
+import os  # to interact with the operating system (the .txt file's directory)
 import re  # for regular expressions - not used right now
 import sys  # for command-line arguments
 
@@ -116,7 +116,6 @@ def load_discography(directory):
     return discography_dict
 
 def print_all_songs_in_album(discography, the_album):
-
     discography_lower_keys = {} # same, but the outer keys (album names) are now lowercase
     for key, value in discography.items():
         try:
@@ -151,6 +150,28 @@ def print_all_songs_in_album(discography, the_album):
     else:
         print("\n", the_album, "isn't an album in the discography, please try again")
 
+def print_Songs_album(discography, the_song, song_length, is_option_seven):
+    each_song_with_its_album = {}  # dict where key -> song name , value -> album where the song is
+    for key in discography:
+        the_keys_song_list = discography[key]["songs_list"]
+        for song in the_keys_song_list:
+            each_song_with_its_album[song["song_name"]] = discography[key]["album_name"]
+
+    if is_option_seven is False: # choice == '5'
+        result_choice_five = ("The song- " + the_song + " (" + song_length + ") " +
+                              "is in Pink Floyd's album- " + each_song_with_its_album.get(the_song))
+        return result_choice_five
+    else:
+        result_choice_seven = (" (" + song_length + ") " + " * From the album- " +
+                               str(each_song_with_its_album.get(the_song)))
+        return result_choice_seven
+    # print(each_song_with_its_album.keys()) # Sheep
+    # print(len(each_song_with_its_album.keys()))
+    # print(len(each_song_with_its_album))
+    # print(each_song_with_its_album.items())
+    # for k in each_song_with_its_album:
+    #     print(k, ",is in album =", each_song_with_its_album.get(k))
+
 def menu(discography):
     while True:  # show menu until user quits
         print("\nMenu:")
@@ -159,56 +180,78 @@ def menu(discography):
             #2\t List all songs in an album
             #3\t Lookup a song's length (enter the exact song name)
             #4\t Lookup a song's lyrics (enter the exact song name)
-            #5\t Lookup a song's album
-            #6\t Lookup song's by name 
-            #7\t Lookup song's by Lyric (get all songs that contain a lyric)
+            #5\t Lookup a song's album (enter the exact song name)
+            #6\t Find a song by part of it's name 
+            #7\t Find a song by a lyric (returns all songs that contain that lyric)
             #8\t Quit 
             """)
-
-        # in 6. 7. letter size doesn't matter (e.g time will return the same as input - Time, if Time is in the db),\
-        # and also find half words, e.g "ti" will find the song time
-
-        # print("5. In which album is the song")
-        # print("6. Searching for a song by name")
-        # print("7. Searching for a song by lyrics")
-        # print("8. Exit")
-
         choice = input("Choose an option: ")
-
         if choice == '1':
             print("The",  len(discography.keys()), "albums in Pink Floyd's discography:\n")
             for key in discography: #discography_dict[current_album_dict.get("album_name")]["album_name"]
                 print("\t-", key, "(" + discography[key]["release_year"] + ")")  # discography.get(key)["release_year"]
         elif choice == '2':
             the_album = input("Enter the album name: ").strip()
-            print(the_album)
+            # print(the_album)
             print_all_songs_in_album(discography, the_album)
-        elif choice in ['3', '4']:
-            all_songs_length_and_lyrics = {}  # nested dict with key -> song name , value -> list with 2 elements = [length, lyrics]
+        elif choice in ['3', '4', '5', '7']:
+            all_songs_length_and_lyrics = {}
+            # nested dict with key -> song name , value -> list with 2 elements = [length, lyrics]
             for key in discography:
                 the_keys_song_list = discography[key]["songs_list"]
                 for song in the_keys_song_list:
                     all_songs_length_and_lyrics[song["song_name"]] = [song["song_length"], song["song_lyrics"]]
-            the_song = input("Enter the songs name: ").strip()
-            if the_song not in all_songs_length_and_lyrics:
-                print("\n", the_song, "isn't a song in the discography, please try again")
-            else:
-                if choice == '3':
-                    print("\n\tThe length of the song-", the_song, "is:", all_songs_length_and_lyrics.get(the_song)[0],
-                          "minutes")
-                elif choice == '4':
-                    print("\nThe lyrics for the song-",
-                          the_song + ":\n\n" + all_songs_length_and_lyrics.get(the_song)[1])
-        # elif choice == '5':  # create a dict where the keys are the album and the value is only a list of song names
-        # elif choice == '6':
-        # elif choice == '7':
 
+            if choice != '7':
+                the_song = input("Enter the songs name: ").strip()
+
+                if the_song not in all_songs_length_and_lyrics:
+                    print("\n", the_song, "isn't a song in the discography, please try again")
+                else:  # the song exists in the discography
+                    if choice == '3':
+                        print("\n\tThe length of the song-", the_song, "is:",
+                              all_songs_length_and_lyrics.get(the_song)[0], "minutes")
+                    elif choice == '4':
+                        print("\nThe lyrics for the song-",
+                              the_song + ":\n\n" + all_songs_length_and_lyrics.get(the_song)[1])
+                    elif choice == '5':
+                        print("\n\t",
+                              print_Songs_album(discography, the_song, all_songs_length_and_lyrics.get(the_song)[0], False))
+            else:  # choice == '7':
+                all_songs_and_lyrics = {}  # dict with key -> song name , value -> it's lyrics
+                for key in discography:
+                    the_keys_song_list = discography[key]["songs_list"]
+                    for song in the_keys_song_list:
+                        all_songs_and_lyrics[song["song_name"]] = song["song_lyrics"]
+
+                the_lyric = input("Enter the Lyric from the song you're looking for: ").strip()
+
+                matched_songs = []
+                the_lyric_lower = the_lyric.lower()
+                for key in all_songs_and_lyrics:
+                    if the_lyric_lower in all_songs_and_lyrics.get(key).lower():
+                        matched_songs.append(key)
+                if len(matched_songs) == 0:
+                    print("\nNo Pink Floyd song contains the Lyric-", "'" + the_lyric + "'", ",Please try again.")
+                elif len(matched_songs) == 1:
+                    print("\nThe song that contains the Lyric", "'" + the_lyric + "'", "is:")
+                    print("\t-", matched_songs[0],
+                          print_Songs_album(discography, matched_songs[0], all_songs_length_and_lyrics.get(matched_songs[0])[0], True))  # discography.get(key)["release_year"]
+                else:
+                    print("\nHere are all of the songs that contain the Lyric", "'" + the_lyric + "':\n")
+                    for song in matched_songs:
+                        print("\t-", song,
+                              print_Songs_album(discography, song, all_songs_length_and_lyrics.get(song)[0], True))  # discography.get(key)["release_year"]
+        elif choice in ['6']:
+            # in 6. 7. letter size doesn't matter (e.g time will return the same as input - Time, if Time is in the db),\
+            # and also find half words, e.g "ti" will find the song time
+            print("")
         elif choice in ['8', 'q', 'Q']:
             break
         else:
             print("Invalid option. Please try again.")
 
-# cd /Users/Shared/PyCharm\ projects/pinkFloydDiscography/ #
+# cd /Users/Shared/PyCharm projects/pinkFloydDiscography/ #
 if __name__ == '__main__':
 
     db_directory = "/Users/Study/Downloads"  # default directory where 'Pink_Floyd_DB.TXT' is located
@@ -220,4 +263,3 @@ if __name__ == '__main__':
         print("Error: please check the 'Pink_Floyd_DB.TXT' file")
     else:
         menu(discography)
-
