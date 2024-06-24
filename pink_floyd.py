@@ -162,7 +162,7 @@ def print_Songs_album(discography, the_song, song_length, is_option_seven):
                               "is in Pink Floyd's album- " + each_song_with_its_album.get(the_song))
         return result_choice_five
     else:
-        result_choice_seven = (" (" + song_length + ") " + " * From the album- " +
+        result_choice_seven = (" (" + song_length + ") " + "\t * From the album: " +
                                str(each_song_with_its_album.get(the_song)))
         return result_choice_seven
     # print(each_song_with_its_album.keys()) # Sheep
