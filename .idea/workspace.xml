@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fee8d51e-91d7-4c61-92d0-35a5e8c77549" name="Changes" comment="first commit">
+      <change afterPath="$PROJECT_DIR$/testing/pink_floyd_testing5.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pink_floyd.py" beforeDir="false" afterPath="$PROJECT_DIR$/pink_floyd.py" afterDir="false" />
     </list>
@@ -37,17 +38,19 @@
     "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/Users/Shared/PyCharm projects/pinkFloydDiscography/.venv",
+    "last_opened_file_path": "/Users/Shared/PyCharm projects/pinkFloydDiscography/testing",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/testing" />
       <recent name="$PROJECT_DIR$/.venv" />
       <recent name="$USER_HOME$/Downloads" />
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/testing" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -129,7 +132,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/pink_floyd_testing3.py</url>
+          <url>file://$PROJECT_DIR$/testing/pink_floyd_testing3.py</url>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
