@@ -18,3 +18,8 @@
     ```shell
     python3 pink_floyd.py /Users/Lior/Downloads
     ```
+
+    ## [cellphone.py](./cellphone.py)
+    ```shell
+    python3 cellphone.py
+    ```
