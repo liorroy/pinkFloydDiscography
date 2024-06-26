@@ -73,7 +73,7 @@ def phone(input_string):
         for element in output_list:  # iterates through our current combinations # first iteration - it's blank ' ' (output_list = [''] )
             print("\t\tNEW element FOR LOOP:")
             print("element= ", element, "\n")
-            for letter in list(nums_and_letters.get(char)): # iterate through our letter for the current digit in the input
+            for letter in list(nums_and_letters.get(char)): # iterate through our letter for the current digit in the input  # = nums_and_letters[char]
                 print("letter= ", letter, "\n", "nums_and_letters = ", nums_and_letters.get(char), "\n")
                 current_result = element + letter #
                 current_char_list.append(current_result)  # append each letter to each existing combination

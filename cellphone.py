@@ -16,7 +16,7 @@ def cellphone_keypad(input_string):
     for char in input_string:
         current_char_list = []
         char = int(char)
-        for element in output_list:  #
+        for element in output_list:
             for letter in nums_and_letters.get(char):
                 current_char_list.append(element + letter)
         output_list = current_char_list
