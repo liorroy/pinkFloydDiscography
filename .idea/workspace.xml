@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fee8d51e-91d7-4c61-92d0-35a5e8c77549" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/cellphone.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testing/cellphone_testing.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,16 +36,17 @@
     "Python.cellphone.executor": "Run",
     "Python.cellphone_testing.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.pink_floyd_final_copy_testing.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/Users/Shared/PyCharm projects/pinkFloydDiscography",
+    "last_opened_file_path": "/Users/Shared/PyCharm projects/pinkFloydDiscography/testing",
     "settings.editor.selected.configurable": "terminal"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/testing" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/.venv" />
       <recent name="$USER_HOME$/Downloads" />
     </key>
